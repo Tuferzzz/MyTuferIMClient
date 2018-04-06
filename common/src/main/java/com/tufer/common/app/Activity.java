@@ -10,7 +10,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 
 /**
- * Created by Administrator on 2018/3/26 0026.
+ * Created by Tufer on 2018/3/26 0026.
  */
 
 public abstract class Activity extends AppCompatActivity{

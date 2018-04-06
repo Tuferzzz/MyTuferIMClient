@@ -12,7 +12,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * Created by Administrator on 2018/3/26 0026.
+ * Created by Tufer on 2018/3/26 0026.
  */
 
 public abstract class Fragment extends android.support.v4.app.Fragment{

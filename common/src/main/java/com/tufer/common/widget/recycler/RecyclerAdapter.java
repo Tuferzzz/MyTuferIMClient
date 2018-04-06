@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import com.tufer.common.R;
 
 import java.util.ArrayList;
@@ -18,13 +17,11 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * Created by Administrator on 2018/3/26 0026.
+ * Created by Tufer on 2018/3/26 0026.
  */
-@SuppressWarnings({"unchecked", "unused"})
 public abstract class RecyclerAdapter<Data>
         extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder<Data>>
-        implements View.OnClickListener, View.OnLongClickListener,
-        AdapterCallback<Data> {
+        implements View.OnClickListener, View.OnLongClickListener, AdapterCallback<Data> {
     private final List<Data> mDataList;
     private AdapterListener<Data> mListener;
 
@@ -185,6 +182,19 @@ public abstract class RecyclerAdapter<Data>
     }
 
     @Override
+    public void update(Data data, ViewHolder<Data> holder) {
+        // 得到当前ViewHolder的坐标
+        int pos = holder.getAdapterPosition();
+        if (pos >= 0) {
+            // 进行数据的移除与更新
+            mDataList.remove(pos);
+            mDataList.add(pos, data);
+            // 通知这个坐标下的数据有更新
+            notifyItemChanged(pos);
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         ViewHolder viewHolder = (ViewHolder) v.getTag(R.id.tag_recycler_holder);
         if (this.mListener != null) {
@@ -225,10 +235,10 @@ public abstract class RecyclerAdapter<Data>
      */
     public interface AdapterListener<Data> {
         // 当Cell点击的时候触发
-        void onItemClick(ViewHolder holder, Data data);
+        void onItemClick(RecyclerAdapter.ViewHolder holder, Data data);
 
         // 当Cell长按时触发
-        void onItemLongClick(ViewHolder holder, Data data);
+        void onItemLongClick(RecyclerAdapter.ViewHolder holder, Data data);
     }
 
     /**
@@ -271,6 +281,24 @@ public abstract class RecyclerAdapter<Data>
             if (this.callback != null) {
                 this.callback.update(data, this);
             }
+        }
+    }
+
+    /**
+     * 对回调接口做一次实现AdapterListener
+     *
+     * @param <Data>
+     */
+    public static abstract class AdapterListenerImpl<Data> implements AdapterListener<Data> {
+
+        @Override
+        public void onItemClick(ViewHolder holder, Data data) {
+
+        }
+
+        @Override
+        public void onItemLongClick(ViewHolder holder, Data data) {
+
         }
     }
 }

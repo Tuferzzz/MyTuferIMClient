@@ -1,1 +1,1 @@
-include ':app', ':common', ':mvptest'
+include ':app', ':common', ':lang', ':factory'
