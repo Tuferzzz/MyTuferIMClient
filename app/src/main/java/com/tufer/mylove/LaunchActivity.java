@@ -6,9 +6,12 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.os.SystemClock;
+import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.tufer.common.app.Activity;
+import com.tufer.factory.persistence.Account;
+import com.tufer.mylove.activities.AccountActivity;
 import com.tufer.mylove.activities.MainActivity;
 import com.tufer.mylove.frags.assist.PermissionsFragment;
 
@@ -81,10 +84,49 @@ public class LaunchActivity extends Activity {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                MainActivity.show(LaunchActivity.this);
-                finish();
+                waitPushReceiverId();
             }
         });
+    }
+
+    /**
+     * 等待个推框架对我们的PushId设置好值
+     */
+    private void waitPushReceiverId() {
+        if (Account.isLogin()) {
+            // 已经登录情况下，判断是否绑定
+            // 如果没有绑定则等待广播接收器进行绑定
+            if (Account.isBind()) {
+                skip();
+                return;
+            }
+        } else {
+            // 没有登录
+            // 如果拿到了PushId, 没有登录是不能绑定PushId的
+            if (!TextUtils.isEmpty(Account.getPushId())) {
+                // 跳转
+                skip();
+                return;
+            }
+        }
+
+        // 循环等待
+        getWindow().getDecorView()
+                .postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        waitPushReceiverId();
+                    }
+                }, 500);
+    }
+
+    private void skip() {
+        if (Account.isLogin()) {
+            MainActivity.show(this);
+        } else {
+            AccountActivity.show(this);
+        }
+        finish();
     }
 
 

@@ -19,6 +19,7 @@ import butterknife.Unbinder;
 /**
  * Created by Tufer on 2018/3/26 0026.
  */
+@SuppressWarnings({"unchecked", "unused"})
 public abstract class RecyclerAdapter<Data>
         extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder<Data>>
         implements View.OnClickListener, View.OnLongClickListener, AdapterCallback<Data> {
