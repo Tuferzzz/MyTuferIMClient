@@ -11,7 +11,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.tufer.common.app.Application;
-import com.tufer.factory.presenter.BaseFragment;
+import com.tufer.common.app.PresenterFragment;
 import com.tufer.common.widget.PortraitView;
 import com.tufer.factory.presenter.user.UpdateInfoContract;
 import com.tufer.factory.presenter.user.UpdateInfoPresenter;
@@ -32,7 +32,7 @@ import static android.app.Activity.RESULT_OK;
 /**
  * 用户更新信息的节目
  */
-public class UpdateInfoFragment extends BaseFragment<UpdateInfoContract.Presenter>
+public class UpdateInfoFragment extends PresenterFragment<UpdateInfoContract.Presenter>
         implements UpdateInfoContract.View {
 
     @BindView(R.id.im_sex)

@@ -1,16 +1,17 @@
-package com.tufer.factory.presenter;
+package com.tufer.common.app;
 
 import android.content.Context;
 
 import com.tufer.common.app.Application;
 import com.tufer.common.app.Fragment;
+import com.tufer.factory.presenter.BaseContract;
 
 
 /**
  * @author Tufer
  * @version 1.0.0
  */
-public abstract class BaseFragment<Presenter extends BaseContract.Presenter> extends Fragment
+public abstract class PresenterFragment<Presenter extends BaseContract.Presenter> extends Fragment
         implements BaseContract.View<Presenter> {
 
     protected Presenter mPresenter;

@@ -5,7 +5,7 @@ import android.content.Context;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.tufer.factory.presenter.BaseFragment;
+import com.tufer.common.app.PresenterFragment;
 import com.tufer.factory.presenter.account.LoginContract;
 import com.tufer.factory.presenter.account.LoginPresenter;
 import com.tufer.mylove.R;
@@ -21,7 +21,7 @@ import butterknife.OnClick;
 /**
  * 登录的界面
  */
-public class LoginFragment extends BaseFragment<LoginContract.Presenter>
+public class LoginFragment extends PresenterFragment<LoginContract.Presenter>
         implements LoginContract.View {
     private com.tufer.mylove.frags.account.AccountTrigger mAccountTrigger;
 

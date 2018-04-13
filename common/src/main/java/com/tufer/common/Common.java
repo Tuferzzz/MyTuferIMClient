@@ -16,5 +16,7 @@ public class Common {
         // 基础的网络请求地址
         String API_URL = "http://192.168.2.228:8080/api/";
 
+        String COUNTRY = "86";
+
     }
 }
