@@ -10,6 +10,7 @@ import com.tufer.factory.presenter.account.LoginContract;
 import com.tufer.factory.presenter.account.LoginPresenter;
 import com.tufer.mylove.R;
 import com.tufer.mylove.activities.MainActivity;
+import com.tufer.mylove.frags.account.AccountTrigger;
 
 import net.qiujuer.genius.ui.widget.Loading;
 
@@ -23,7 +24,7 @@ import butterknife.OnClick;
  */
 public class LoginFragment extends PresenterFragment<LoginContract.Presenter>
         implements LoginContract.View {
-    private com.tufer.mylove.frags.account.AccountTrigger mAccountTrigger;
+    private AccountTrigger mAccountTrigger;
 
     @BindView(R.id.edit_phone)
     EditText mPhone;

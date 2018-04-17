@@ -55,15 +55,26 @@
             android:name=".activities.UserActivity"
             android:label="@string/title_activity_user"
             android:theme="@style/AppTheme.Account" />
+        <activity
+            android:name=".activities.SearchActivity"
+            android:label="@string/title_search"
+            android:theme="@style/AppTheme.TransStatusBar" />
+        <activity
+            android:name=".activities.MessageActivity"
+            android:label="@string/title_activity_message"
+            android:theme="@style/AppTheme.TransStatusBar" />
+        <activity
+            android:name=".activities.PersonalActivity"
+            android:label="@string/title_activity_personal"
+            android:theme="@style/AppTheme.TransStatusBar" />
 
         <service
             android:name="com.tufer.mylove.service.GetuiPushService"
             android:exported="true"
             android:label="PushService"
-            android:process=":pushservice">
-        </service>
+            android:process=":pushservice"/>
 
-        <service android:name="com.tufer.mylove.service.GetuiIntentService"/>
+        <service android:name="com.tufer.mylove.service.GetuiIntentService" />
     </application>
 
 </manifest>

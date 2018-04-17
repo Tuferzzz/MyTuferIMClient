@@ -1,5 +1,6 @@
 package com.tufer.factory.model.card;
 
+import com.tufer.factory.model.Author;
 import com.tufer.factory.model.db.User;
 
 import java.util.Date;
@@ -8,7 +9,7 @@ import java.util.Date;
  * @author Tufer
  * @version 1.0.0
  */
-public class UserCard {
+public class UserCard implements Author {
     private String id;
     private String name;
     private String phone;
