@@ -25,7 +25,7 @@ public abstract class BaseDbRepository<Data extends BaseDbModel<Data>> implement
         QueryTransaction.QueryResultListCallback<Data> {
     // 和Presenter交互的回调
     private SucceedCallback<List<Data>> callback;
-    private final List<Data> dataList = new LinkedList<>(); // 当前缓存的数据
+    protected final LinkedList<Data> dataList = new LinkedList<>(); // 当前缓存的数据
     private Class<Data> dataClass; // 当前范型对应的真实的Class信息
 
     @SuppressWarnings("unchecked")
@@ -95,13 +95,13 @@ public abstract class BaseDbRepository<Data extends BaseDbModel<Data>> implement
         }
 
 //        // 转变为数组
-//        Data[] datas = CollectionUtil.toArray(tResult, dataClass);
+	        Data[] datas = CollectionUtil.toArray(tResult, dataClass);
 //        // 回到数据集更新的操作中
-//        //onDataSave(datas);
+        	onDataSave(datas);
 
-        SucceedCallback<List<Data>> callback = this.callback;
-        if (callback != null)
-            callback.onDataLoaded(tResult);
+        //SucceedCallback<List<Data>> callback = this.callback;
+        //if (callback != null)
+            //callback.onDataLoaded(tResult);
     }
 
     // 插入或者更新

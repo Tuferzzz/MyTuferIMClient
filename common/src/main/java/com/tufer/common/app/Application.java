@@ -1,5 +1,8 @@
 package com.tufer.common.app;
 
+import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.StringRes;
 import android.widget.Toast;
@@ -8,6 +11,8 @@ import net.qiujuer.genius.kit.handler.Run;
 import net.qiujuer.genius.kit.handler.runable.Action;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Tufer
@@ -15,11 +20,63 @@ import java.io.File;
  */
 public class Application extends android.app.Application {
     private static Application instance;
+    private List<Activity> activities = new ArrayList<>();
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
+
+
+        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+                activities.add(activity);
+            }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+                activities.remove(activity);
+            }
+        });
+    }
+
+    // 退出所有
+    public void finishAll(){
+        for (Activity activity : activities) {
+            activity.finish();
+        }
+
+        showAccountView(this);
+    }
+
+    protected void showAccountView(Context context){
+
     }
 
     /**

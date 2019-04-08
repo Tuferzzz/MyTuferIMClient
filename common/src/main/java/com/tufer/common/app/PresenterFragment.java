@@ -2,8 +2,6 @@ package com.tufer.common.app;
 
 import android.content.Context;
 
-import com.tufer.common.app.Application;
-import com.tufer.common.app.Fragment;
 import com.tufer.factory.presenter.BaseContract;
 
 
@@ -52,5 +50,12 @@ public abstract class PresenterFragment<Presenter extends BaseContract.Presenter
     public void setPresenter(Presenter presenter) {
         // View中赋值Presenter
         mPresenter = presenter;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mPresenter != null)
+            mPresenter.destroy();
     }
 }

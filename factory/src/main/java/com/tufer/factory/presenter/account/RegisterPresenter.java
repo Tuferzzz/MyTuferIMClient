@@ -110,26 +110,30 @@ public class RegisterPresenter extends BasePresenter<RegisterContract.View>
     private void checkVerificationCode(final String phone, final String code, final String name, final String password) {
         // 注册一个事件回调，用于处理提交验证码操作的结果
         // 得到View接口
-        final RegisterContract.View view = getView();
-        SMSSDK.registerEventHandler(new EventHandler() {
-            public void afterEvent(int event, int result, Object data) {
-                if (result == SMSSDK.RESULT_COMPLETE) {
-                    // 处理验证成功的结果
-                    // 进行网络请求
-                    // 构造Model，进行请求调用
-                    RegisterModel model = new RegisterModel(phone, password, name, Account.getPushId());
-                    // 进行网络请求，并设置回送接口为自己
-                    AccountHelper.register(model, RegisterPresenter.this);
-                } else {
-                    // 处理错误的结果
-                    view.showError(R.string.data_account_register_invalid_verification_code);
-                }
-                // 用完回调要注销，否则会造成泄露
-                SMSSDK.unregisterEventHandler(this);
-            }
-        });
-        // 触发操作
-        SMSSDK.submitVerificationCode(Common.Constance.COUNTRY, phone, code);
+
+        RegisterModel model = new RegisterModel(phone, password, name, Account.getPushId());
+        // 进行网络请求，并设置回送接口为自己
+        AccountHelper.register(model, RegisterPresenter.this);
+//        final RegisterContract.View view = getView();
+//        SMSSDK.registerEventHandler(new EventHandler() {
+//            public void afterEvent(int event, int result, Object data) {
+//                if (result == SMSSDK.RESULT_COMPLETE) {
+//                    // 处理验证成功的结果
+//                    // 进行网络请求
+//                    // 构造Model，进行请求调用
+//                    RegisterModel model = new RegisterModel(phone, password, name, Account.getPushId());
+//                    // 进行网络请求，并设置回送接口为自己
+//                    AccountHelper.register(model, RegisterPresenter.this);
+//                } else {
+//                    // 处理错误的结果
+//                    view.showError(R.string.data_account_register_invalid_verification_code);
+//                }
+//                // 用完回调要注销，否则会造成泄露
+//                SMSSDK.unregisterEventHandler(this);
+//            }
+//        });
+//        // 触发操作
+//        SMSSDK.submitVerificationCode(Common.Constance.COUNTRY, phone, code);
     }
 
     @Override

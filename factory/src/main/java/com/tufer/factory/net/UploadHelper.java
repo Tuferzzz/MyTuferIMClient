@@ -27,13 +27,13 @@ import java.util.Date;
 public class UploadHelper {
     private static final String TAG = UploadHelper.class.getSimpleName();
     // 与你们的存储区域有关系
-    private static final String ENDPOINT = "http://oss-cn-shenzhen.aliyuncs.com";
+    public static final String ENDPOINT = "http://oss-cn-shenzhen.aliyuncs.com";
     // 上传的仓库名
     private static final String BUCKET_NAME = "mylovrfortufer";
 
-    private static final String ACCESSKEYID="LTAIqSD7y7EFCAvY";
+    private static final String ACCESSKEYID="LTAIafCYU6A57ooh";
 
-    private static final String ACCESSKEYSECRET="jTXxyxAt7is9UZJkDZwup7NDlyw2dI";
+    private static final String ACCESSKEYSECRET="yAdILSveJ0v6M1HdylL2S1ePiHYvUZ";
 
 
 
@@ -70,15 +70,16 @@ public class UploadHelper {
         } catch (ClientException e) {
             // 本地异常如网络异常等
             e.printStackTrace();
-            return null;
+            //return null;
         } catch (ServiceException e) {
             // 服务异常
             Log.e("RequestId", e.getRequestId());
             Log.e("ErrorCode", e.getErrorCode());
             Log.e("HostId", e.getHostId());
             Log.e("RawMessage", e.getRawMessage());
-            return null;
+            //return null;
         }
+        return null;
     }
 
     /**
