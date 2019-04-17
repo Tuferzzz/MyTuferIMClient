@@ -4,11 +4,13 @@ package com.tufer.mylove.frags.assist;
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,14 +33,9 @@ public class PermissionsFragment extends BottomSheetDialogFragment
         implements EasyPermissions.PermissionCallbacks {
     // 权限回调的标示
     private static final int RC = 0x0100;
-    private static PermissionsFragment instance;
 
     public PermissionsFragment() {
         // Required empty public constructor
-    }
-
-    public static PermissionsFragment getInstance() {
-        return instance;
     }
 
     @NonNull
@@ -48,6 +45,14 @@ public class PermissionsFragment extends BottomSheetDialogFragment
         return new GalleryFragment.TransStatusBottomSheetDialog(getContext());
     }
 
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            haveAll(activity, activity.getSupportFragmentManager());
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -164,16 +169,17 @@ public class PermissionsFragment extends BottomSheetDialogFragment
 
     // 私有的show方法
     private static void show(FragmentManager manager) {
+        // 去重避免多次界面重复可见导致弹出框累积
+        String tag = PermissionsFragment.class.getName();
+        Fragment oldFragment = manager.findFragmentByTag(tag);
+        if (oldFragment != null) {
+            manager.beginTransaction()
+                    .remove(oldFragment)
+                    .commitNowAllowingStateLoss();
+        }
         // 调用BottomSheetDialogFragment以及准备好的显示方法
-        if(instance==null){
-            instance=new PermissionsFragment();
-        }
-        //如果当前Fragment已经显示在Activity当中则不需要show方法
-        if(!instance.isAdded()){
-            instance.show(manager, PermissionsFragment.class.getName());
-        }
-
-        Log.d("Tufer", "show: ");
+        new PermissionsFragment()
+                .show(manager, tag);
     }
 
 
@@ -194,11 +200,8 @@ public class PermissionsFragment extends BottomSheetDialogFragment
         // 如果没有则显示当前申请权限的界面
         if (!haveAll) {
             show(manager);
-        }else{
-            if(instance!=null){
-                instance.dismiss();
-            }
         }
+
         return haveAll;
     }
 
@@ -221,7 +224,7 @@ public class PermissionsFragment extends BottomSheetDialogFragment
             Application.showToast(R.string.label_permission_ok);
             // Fragment 中调用getView得到跟布局，前提是在onCreateView方法之后
             refreshState(getView());
-            //dismiss();
+            this.dismiss();
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.title_assist_permissions),
                     RC, perms);
