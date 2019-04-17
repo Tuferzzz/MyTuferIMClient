@@ -8,8 +8,6 @@ import com.igexin.sdk.PushManager;
 import com.mob.MobSDK;
 import com.tufer.common.app.Application;
 import com.tufer.factory.Factory;
-import com.tufer.mylove.service.GetuiIntentService;
-
 /**
  * Created by Tufer on 2018/4/10 0010.
  */

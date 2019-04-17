@@ -8,6 +8,7 @@ import com.tufer.factory.Factory;
 import com.tufer.factory.persistence.Account;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -41,6 +42,9 @@ public class Network {
 
         // 存储起来
         instance.client = new OkHttpClient.Builder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(20, TimeUnit.SECONDS)
                 // 给所有的请求添加一个拦截器
                 .addInterceptor(new Interceptor() {
                     @Override
