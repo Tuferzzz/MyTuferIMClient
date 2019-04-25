@@ -5,12 +5,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -24,6 +28,7 @@ import com.tufer.mylove.frags.main.ActiveFragment;
 import com.tufer.mylove.frags.main.ContactFragment;
 import com.tufer.mylove.frags.main.GroupFragment;
 import com.tufer.mylove.helper.NavHelper;
+import com.tufer.utils.StatusBarUtil;
 
 import net.qiujuer.genius.ui.Ui;
 import net.qiujuer.genius.ui.widget.FloatActionButton;
@@ -36,7 +41,7 @@ import butterknife.OnClick;
 
 public class MainActivity extends Activity
         implements BottomNavigationView.OnNavigationItemSelectedListener,
-        NavHelper.OnTabChangedListener<Integer> {
+        NavHelper.OnTabChangedListener<Integer>, NavigationView.OnNavigationItemSelectedListener {
 
     @BindView(R.id.appbar)
     View mLayAppbar;
@@ -55,6 +60,12 @@ public class MainActivity extends Activity
 
     @BindView(R.id.btn_action)
     FloatActionButton mAction;
+
+    @BindView(R.id.drawer_layout)
+    DrawerLayout mDrawerLayout;
+
+    @BindView(R.id.nav_view)
+    NavigationView mNavigationView;
 
     private NavHelper<Integer> mNavHelper;
 
@@ -87,6 +98,8 @@ public class MainActivity extends Activity
     protected void initWidget() {
         super.initWidget();
 
+        StatusBarUtil.setColor(this,getResources().getColor(com.tufer.common.R.color.colorPrimary));
+
         // 初始化底部辅助工具类
         mNavHelper = new NavHelper<>(this, R.id.lay_container,
                 getSupportFragmentManager(), this);
@@ -107,6 +120,10 @@ public class MainActivity extends Activity
                         this.view.setBackground(resource.getCurrent());
                     }
                 });
+
+        mNavigationView.setNavigationItemSelectedListener(this);
+
+        StatusBarUtil.setColorForDrawerLayout(MainActivity.this, mDrawerLayout, getResources().getColor(R.color.colorPrimary), 0);
     }
 
     @Override
@@ -124,7 +141,8 @@ public class MainActivity extends Activity
 
     @OnClick(R.id.im_portrait)
     void onPortraitClick() {
-        PersonalActivity.show(this, Account.getUserId());
+//        PersonalActivity.show(this, Account.getUserId());
+        mDrawerLayout.openDrawer(GravityCompat.START);
     }
 
     @OnClick(R.id.im_search)
@@ -157,7 +175,18 @@ public class MainActivity extends Activity
      */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        // 转接事件流到工具类中
+        int id = item.getItemId();
+        switch (id){
+            case R.id.nav_camera:
+            case R.id.nav_gallery:
+            case R.id.nav_slideshow:
+            case R.id.nav_manage:
+            case R.id.nav_share:
+            case R.id.nav_send:
+                Toast.makeText(this,item.getTitle(),Toast.LENGTH_LONG).show();
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+        }
         return mNavHelper.performClickMenu(item.getItemId());
     }
 
@@ -202,5 +231,14 @@ public class MainActivity extends Activity
                 .start();
 
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 }
