@@ -6,4 +6,7 @@
     <item name="tag_recycler_holder" type="id" />
     <!--默认头像的drawable名字-->
     <item name="default_portrait" type="drawable" />
+
+    <item type="id" name="statusbarutil_fake_status_bar_view" />
+    <item type="id" name="statusbarutil_translucent_view" />
 </resources>

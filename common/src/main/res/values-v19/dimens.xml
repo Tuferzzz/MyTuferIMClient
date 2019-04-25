@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="statusBarSize">25dp</dimen>
+    <dimen name="statusBarSize_drawerlayout">0dp</dimen>
+</resources>

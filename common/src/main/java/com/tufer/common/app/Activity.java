@@ -12,6 +12,7 @@ import android.view.Window;
 
 
 import com.tufer.common.widget.convention.PlaceHolderView;
+import com.tufer.utils.StatusBarUtil;
 
 import java.util.List;
 
@@ -36,13 +37,7 @@ public abstract class Activity extends AppCompatActivity {
             int layId = getContentLayoutId();
             setContentView(layId);
             //5.0版本以上可以设置沉浸式状态栏
-            if (Build.VERSION.SDK_INT >= 21) {
-                Window window = getWindow();
-                window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-                window.setStatusBarColor(Color.TRANSPARENT);
-
-            }
+            StatusBarUtil.setTransparentForWindow(this);
             initBefore();
             initWidget();
             initData();
