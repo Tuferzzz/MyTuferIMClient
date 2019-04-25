@@ -27,14 +27,14 @@ public class PersonalPresenter extends BasePresenter<PersonalContract.View>
     public void start() {
         super.start();
 
-        // 个人界面用户数据优先从网络拉取
+        // 个人界面用户数据优先从本地拉取
         Factory.runOnAsync(new Runnable() {
             @Override
             public void run() {
                 PersonalContract.View view = getView();
                 if (view != null) {
                     String id = view.getUserId();
-                    User user = UserHelper.searchFirstOfNet(id);
+                    User user = UserHelper.search(id);
                     onLoaded(user);
                 }
             }
