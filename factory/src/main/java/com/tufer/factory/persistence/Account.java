@@ -142,6 +142,14 @@ public class Account {
         save(Factory.app());
     }
 
+    public static void outAccount(){
+        Account.token = "";
+        Account.account = "";
+        Account.userId = "";
+        Account.isBind = false;
+        save(Factory.app());
+    }
+
     /**
      * 获取当前登录的用户信息
      *

@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,10 +21,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.ViewTarget;
-import com.tufer.common.app.Activity;
+import com.tufer.common.app.PresenterActivity;
 import com.tufer.common.widget.PortraitView;
-import com.tufer.factory.model.db.User;
 import com.tufer.factory.persistence.Account;
+import com.tufer.factory.presenter.account.OutAccountContract;
+import com.tufer.factory.presenter.account.OutAccountPresenter;
 import com.tufer.mylove.R;
 import com.tufer.mylove.frags.main.ActiveFragment;
 import com.tufer.mylove.frags.main.ContactFragment;
@@ -42,9 +42,9 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class MainActivity extends Activity
+public class MainActivity extends PresenterActivity<OutAccountContract.Presenter>
         implements BottomNavigationView.OnNavigationItemSelectedListener,
-        NavHelper.OnTabChangedListener<Integer>, NavigationView.OnNavigationItemSelectedListener {
+        NavHelper.OnTabChangedListener<Integer>, NavigationView.OnNavigationItemSelectedListener,OutAccountContract.View {
 
     @BindView(R.id.appbar)
     View mLayAppbar;
@@ -201,6 +201,9 @@ public class MainActivity extends Activity
                 Toast.makeText(this,item.getTitle(),Toast.LENGTH_LONG).show();
                 mDrawerLayout.closeDrawer(GravityCompat.START);
                 return true;
+            case R.id.nav_accout:
+                mPresenter.outAccount();
+                return true;
         }
         return mNavHelper.performClickMenu(item.getItemId());
     }
@@ -255,5 +258,17 @@ public class MainActivity extends Activity
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected OutAccountContract.Presenter initPresenter() {
+        return new OutAccountPresenter(this);
+    }
+
+    @Override
+    public void outAccountSuccess() {
+        Account.outAccount();
+        AccountActivity.show(this);
+        finish();
     }
 }

@@ -59,6 +59,9 @@ public interface RemoteService {
     @POST("account/bind/{pushId}")
     Call<RspModel<AccountRspModel>> accountBind(@Path(encoded = true, value = "pushId") String pushId);
 
+    @PUT("account/unbind")
+    Call<RspModel<AccountRspModel>> outAccount();
+
     // 用户更新的接口
     @PUT("user")
     Call<RspModel<UserCard>> userUpdate(@Body UserUpdateModel model);

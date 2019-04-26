@@ -55,6 +55,20 @@ public class AccountHelper {
     }
 
     /**
+     * 退出账户的调用
+     *
+     * @param callback 成功与失败的接口回送
+     */
+    public static void outAccount(final DataSource.Callback<User> callback) {
+        // 调用Retrofit对我们的网络请求接口做代理
+        RemoteService service = Network.remote();
+        // 退出账户只需把pushId置为空
+        Call<RspModel<AccountRspModel>> call = service.outAccount();
+        // 异步的请求
+        call.enqueue(new AccountRspCallback(callback));
+    }
+
+    /**
      * 对设备Id进行绑定的操作
      *
      * @param callback Callback
@@ -70,7 +84,6 @@ public class AccountHelper {
         Call<RspModel<AccountRspModel>> call = service.accountBind(pushId);
         call.enqueue(new AccountRspCallback(callback));
     }
-
 
     /**
      * 请求的回调部分封装
@@ -114,18 +127,13 @@ public class AccountHelper {
                 }).build().execute();
                 */
                 // 同步到XML持久化中
-                Account.login(accountRspModel);
-
-                // 判断绑定状态，是否绑定设备
-                if (accountRspModel.isBind()) {
-                    // 设置绑定状态为True
+                if(accountRspModel.isBind()){
+                    Account.login(accountRspModel);
                     Account.setBind(true);
-                    // 然后返回
-                    if (callback != null)
-                        callback.onDataLoaded(user);
-                } else {
-                    // 进行绑定的唤起
-                    bindPush(callback);
+                }
+                // 然后返回
+                if (callback != null){
+                    callback.onDataLoaded(user);
                 }
             } else {
                 // 错误解析
