@@ -1,5 +1,6 @@
 package com.tufer.factory;
 
+import android.content.Intent;
 import android.support.annotation.StringRes;
 import android.util.Log;
 
@@ -229,7 +230,16 @@ public class Factory {
      * 收到账户退出的消息需要进行账户退出重新登录
      */
     private void logout() {
-
+        //清理持久化数据
+        Account.outAccount();
+        // 显示账户登录页面
+        Intent intent = new Intent("com.tufer.mylove.AccountActivity");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+        app().startActivity(intent);
+        //显示账户退出消息
+        Application.showToast(R.string.label_account_out_tip);
+        //关闭所有Activity
+        app().finishAll();
     }
 
 

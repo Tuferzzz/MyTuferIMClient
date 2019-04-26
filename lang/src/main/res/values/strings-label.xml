@@ -50,4 +50,6 @@
     <string name="toast_audio_record_time_short_error">录音时间太短!</string>
 
     <string name="toast_download_error">下载失败!</string>
+
+    <string name="label_account_out_tip">您账号在别处登陆，导致被迫下线，若非本人行为，请尽快修改密码!</string>
 </resources>
