@@ -20,8 +20,9 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="@color/white"
-        app:itemIconTint="@color/text_nav"
-        app:itemTextColor="@color/text_nav"
+        app:itemIconTint="@color/textDark"
+        app:itemTextColor="@color/textDark"
+        app:itemTextAppearance="@style/TextAppearance.AppCompat.Body2"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />
 

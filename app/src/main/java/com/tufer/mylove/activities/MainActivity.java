@@ -177,12 +177,10 @@ public class MainActivity extends Activity
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         switch (id){
-            case R.id.nav_camera:
-            case R.id.nav_gallery:
-            case R.id.nav_slideshow:
-            case R.id.nav_manage:
-            case R.id.nav_share:
-            case R.id.nav_send:
+            case R.id.nav_my_data:
+            case R.id.nav_my_news:
+            case R.id.nav_my_album:
+            case R.id.nav_setting:
                 Toast.makeText(this,item.getTitle(),Toast.LENGTH_LONG).show();
                 mDrawerLayout.closeDrawer(GravityCompat.START);
                 return true;
