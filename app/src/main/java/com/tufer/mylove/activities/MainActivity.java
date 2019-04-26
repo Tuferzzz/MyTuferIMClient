@@ -1,5 +1,6 @@
 package com.tufer.mylove.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AnticipateOvershootInterpolator;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +24,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.ViewTarget;
 import com.tufer.common.app.Activity;
 import com.tufer.common.widget.PortraitView;
+import com.tufer.factory.model.db.User;
 import com.tufer.factory.persistence.Account;
 import com.tufer.mylove.R;
 import com.tufer.mylove.frags.main.ActiveFragment;
@@ -126,6 +129,7 @@ public class MainActivity extends Activity
         StatusBarUtil.setColorForDrawerLayout(MainActivity.this, mDrawerLayout, getResources().getColor(R.color.colorPrimary), 0);
     }
 
+    @SuppressLint("StringFormatMatches")
     @Override
     protected void initData() {
         super.initData();
@@ -137,6 +141,19 @@ public class MainActivity extends Activity
 
         // 初始化头像加载
         mPortrait.setup(Glide.with(this), Account.getUser());
+
+        //初始化侧滑菜单中的数据
+        View navHeadView = mNavigationView.getHeaderView(0);
+        PortraitView userPortrait= navHeadView.findViewById(R.id.im_user_portrait);
+        TextView userName= navHeadView.findViewById(R.id.txt_name);
+        TextView userDesc= navHeadView.findViewById(R.id.txt_desc);
+        TextView userFollows= navHeadView.findViewById(R.id.txt_follows);
+        TextView userFollowing= navHeadView.findViewById(R.id.txt_following);
+        userPortrait.setup(Glide.with(this), Account.getUser());
+        userName.setText(Account.getUser().getName());
+        userDesc.setText(Account.getUser().getDesc());
+        userFollows.setText(String.format(getString(R.string.label_follows), Account.getUser().getFollows()));
+        userFollowing.setText(String.format(getString(R.string.label_following), Account.getUser().getFollowing()));
     }
 
     @OnClick(R.id.im_portrait)
