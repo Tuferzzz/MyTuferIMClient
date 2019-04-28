@@ -231,7 +231,7 @@ public class Factory {
      */
     private void logout() {
         //清理持久化数据
-        Account.outAccount();
+        Account.clearAccount();
         // 显示账户登录页面
         Intent intent = new Intent("com.tufer.mylove.AccountActivity");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );

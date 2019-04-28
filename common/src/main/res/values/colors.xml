@@ -27,4 +27,7 @@
     <color name="maskChatHeader">@color/black_alpha_48</color>
     <!--导航栏Icon遮罩色-->
     <color name="navIconTintLight">@color/white_alpha_240</color>
+
+    <!--应用图标的背景颜色-->
+    <color name="ic_launcher_background">#3E99A6</color>
 </resources>

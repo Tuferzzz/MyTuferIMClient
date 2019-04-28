@@ -267,7 +267,7 @@ public class MainActivity extends PresenterActivity<OutAccountContract.Presenter
 
     @Override
     public void outAccountSuccess() {
-        Account.outAccount();
+        Account.clearAccount();
         AccountActivity.show(this);
         finish();
     }

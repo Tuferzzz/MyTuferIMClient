@@ -142,7 +142,7 @@ public class Account {
         save(Factory.app());
     }
 
-    public static void outAccount(){
+    public static void clearAccount(){
         Account.token = "";
         Account.account = "";
         Account.userId = "";
