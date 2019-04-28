@@ -225,6 +225,7 @@ public class Session extends BaseDbModel<Session> {
                 this.message = message;
                 this.content = message.getSampleContent();
                 this.modifyAt = message.getCreateAt();
+                this.unReadCount++;
             }
         } else {
             // 和人聊天的
@@ -261,6 +262,7 @@ public class Session extends BaseDbModel<Session> {
                 this.message = message;
                 this.content = message.getSampleContent();
                 this.modifyAt = message.getCreateAt();
+                this.unReadCount++;
             }
         }
     }

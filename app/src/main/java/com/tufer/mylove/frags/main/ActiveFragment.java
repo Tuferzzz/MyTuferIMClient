@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import com.tufer.common.widget.EmptyView;
 import com.tufer.common.widget.PortraitView;
 import com.tufer.common.widget.recycler.RecyclerAdapter;
 import com.tufer.face.Face;
+import com.tufer.factory.data.helper.DbHelper;
 import com.tufer.factory.model.db.Session;
 import com.tufer.factory.presenter.message.SessionContract;
 import com.tufer.factory.presenter.message.SessionPresenter;
@@ -68,6 +70,10 @@ public class ActiveFragment extends PresenterFragment<SessionContract.Presenter>
         mAdapter.setListener(new RecyclerAdapter.AdapterListenerImpl<Session>() {
             @Override
             public void onItemClick(RecyclerAdapter.ViewHolder holder, Session session) {
+                session.setUnReadCount(0);
+                Log.e("Tufer", "onItemClick: "+session );
+                DbHelper.save(Session.class, session);
+                holder.updateData(session);
                 MessageActivity.show(getContext(), session);
             }
         });
@@ -102,6 +108,9 @@ public class ActiveFragment extends PresenterFragment<SessionContract.Presenter>
         @BindView(R.id.im_portrait)
         PortraitView mPortraitView;
 
+        @BindView(R.id.tv_msg_count)
+        TextView mMsgCount;
+
         @BindView(R.id.txt_name)
         TextView mName;
 
@@ -119,6 +128,17 @@ public class ActiveFragment extends PresenterFragment<SessionContract.Presenter>
         protected void onBind(Session session) {
             mPortraitView.setup(Glide.with(ActiveFragment.this), session.getPicture());
             mName.setText(session.getTitle());
+            int unReadMsgCount = session.getUnReadCount();
+            if(unReadMsgCount==0){
+                mMsgCount.setVisibility(View.GONE);
+            }else {
+                mMsgCount.setVisibility(View.VISIBLE);
+                if(unReadMsgCount>99){
+                    mMsgCount.setText("99+");
+                }else {
+                    mMsgCount.setText(unReadMsgCount+"");
+                }
+            }
 
             String str = TextUtils.isEmpty(session.getContent()) ? "" : session.getContent();
             Spannable spannable = new SpannableString(str);
