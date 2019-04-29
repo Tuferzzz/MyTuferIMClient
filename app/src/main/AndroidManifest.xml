@@ -101,7 +101,7 @@
             android:label="@string/title_activity_message"
             android:theme="@style/AppTheme.Message"
             android:launchMode="singleInstance"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden" />
         <activity
             android:name=".activities.PersonalActivity"
             android:launchMode="singleInstance"

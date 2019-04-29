@@ -12,25 +12,26 @@ import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
 
 import net.qiujuer.genius.kit.handler.Run;
-import net.qiujuer.genius.kit.handler.runable.Action;
 import net.qiujuer.genius.ui.Ui;
 import net.qiujuer.genius.ui.compat.UiCompat;
 import net.qiujuer.genius.ui.widget.Loading;
 import net.qiujuer.widget.airpanel.AirPanel;
 import net.qiujuer.widget.airpanel.Util;
 
+import com.tufer.common.app.Activity;
 import com.tufer.common.app.Application;
 import com.tufer.common.app.PresenterFragment;
 import com.tufer.common.tools.AudioPlayHelper;
+import com.tufer.common.widget.MessageLayout;
 import com.tufer.common.widget.PortraitView;
 import com.tufer.common.widget.adapter.TextWatcherAdapter;
 import com.tufer.common.widget.recycler.RecyclerAdapter;
@@ -61,6 +62,7 @@ public abstract class ChatFragment<InitModel>
 
     protected String mReceiverId;
     protected Adapter mAdapter;
+    private boolean isSoftKeyboardOpen=false;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -81,12 +83,25 @@ public abstract class ChatFragment<InitModel>
     View mSubmit;
 
     // 控制顶部面板与软键盘过度的Boss控件
-    private AirPanel.Boss mPanelBoss;
-    private PanelFragment mPanelFragment;
+     private MessageLayout mPanelBoss;
+     private PanelFragment mPanelFragment;
 
     // 语音的基础
     private FileCache<AudioHolder> mAudioFileCache;
     private AudioPlayHelper<AudioHolder> mAudioPlayer;
+
+    private Activity.MyOnTouchListener onTouchListener = ev -> {
+        if(ev.getAction()== KeyEvent.ACTION_DOWN){
+            if(mPanelBoss.isOpen()||isSoftKeyboardOpen){
+                if(ev.getY()<1100){
+                    mPanelBoss.closePanel();
+                    Util.hideKeyboard(mContent);
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
 
     @Override
     protected void initArgs(Bundle bundle) {
@@ -105,6 +120,7 @@ public abstract class ChatFragment<InitModel>
 
     @Override
     protected void initWidget(View root) {
+        ((Activity)getActivity()).registerMyOnTouchListener(onTouchListener);
         // 拿到占位布局
         // 替换顶部布局一定需要发生在super之前
         // 防止控件绑定异常
@@ -116,13 +132,10 @@ public abstract class ChatFragment<InitModel>
         super.initWidget(root);
 
         // 初始化面板操作
-        mPanelBoss = (AirPanel.Boss) root.findViewById(R.id.lay_content);
-        mPanelBoss.setup(new AirPanel.PanelListener() {
-            @Override
-            public void requestHideSoftKeyboard() {
-                // 请求隐藏软键盘
-                Util.hideKeyboard(mContent);
-            }
+        mPanelBoss =  root.findViewById(R.id.lay_content);
+        mPanelBoss.setup(() -> {
+            // 请求隐藏软键盘
+            Util.hideKeyboard(mContent);
         });
         mPanelBoss.setOnStateChangedListener(new AirPanel.OnStateChangedListener() {
             @Override
@@ -135,8 +148,12 @@ public abstract class ChatFragment<InitModel>
             @Override
             public void onSoftKeyboardStateChanged(boolean isOpen) {
                 // 软键盘改变
-                if (isOpen)
+                if (isOpen){
                     onBottomPanelOpened();
+                    isSoftKeyboardOpen=true;
+                }else {
+                    isSoftKeyboardOpen=false;
+                }
             }
         });
         mPanelFragment = (PanelFragment) getChildFragmentManager().findFragmentById(R.id.frag_panel);
@@ -160,7 +177,6 @@ public abstract class ChatFragment<InitModel>
                 }
             }
         });
-
     }
 
     @Override
@@ -191,12 +207,9 @@ public abstract class ChatFragment<InitModel>
         mAudioFileCache = new FileCache<>("audio/cache", "mp3", new FileCache.CacheListener<AudioHolder>() {
             @Override
             public void onDownloadSucceed(final AudioHolder holder, final File file) {
-                Run.onUiAsync(new Action() {
-                    @Override
-                    public void call() {
-                        // 主线程播放
-                        mAudioPlayer.trigger(holder, file.getAbsolutePath());
-                    }
+                Run.onUiAsync(() -> {
+                    // 主线程播放
+                    mAudioPlayer.trigger(holder, file.getAbsolutePath());
                 });
             }
 
@@ -212,12 +225,15 @@ public abstract class ChatFragment<InitModel>
     public void onDestroy() {
         super.onDestroy();
         mAudioPlayer.destroy();
+        ((Activity)getActivity()).unRegisterMyOnTouchListener(onTouchListener);
     }
 
     private void onBottomPanelOpened() {
         // 当底部面板或者软键盘打开时触发
-        if (mAppBarLayout != null)
+        if (mAppBarLayout != null) {
             mAppBarLayout.setExpanded(false, true);
+            mRecyclerView.scrollToPosition(getRecyclerAdapter().getItemCount() - 1);
+        }
     }
 
     @Override
@@ -241,12 +257,7 @@ public abstract class ChatFragment<InitModel>
     protected void initToolbar() {
         Toolbar toolbar = mToolbar;
         toolbar.setNavigationIcon(R.drawable.ic_back);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> getActivity().finish());
     }
 
     //  给界面的Appbar设置一个监听，得到关闭与打开的时候的进度
@@ -274,13 +285,17 @@ public abstract class ChatFragment<InitModel>
     @OnClick(R.id.btn_face)
     void onFaceClick() {
         // 仅仅只需请求打开即可
-        mPanelBoss.openPanel();
+        if(!mPanelBoss.isOpen()){
+            mPanelBoss.openPanel();
+        }
         mPanelFragment.showFace();
     }
 
     @OnClick(R.id.btn_record)
     void onRecordClick() {
-        mPanelBoss.openPanel();
+        if(!mPanelBoss.isOpen()){
+            mPanelBoss.openPanel();
+        }
         mPanelFragment.showRecord();
     }
 
@@ -291,13 +306,16 @@ public abstract class ChatFragment<InitModel>
             String content = mContent.getText().toString();
             mContent.setText("");
             mPresenter.pushText(content);
+            mRecyclerView.scrollToPosition(mAdapter.getItemCount() - 1);
         } else {
             onMoreClick();
         }
     }
 
     private void onMoreClick() {
-        mPanelBoss.openPanel();
+        if(!mPanelBoss.isOpen()){
+            mPanelBoss.openPanel();
+        }
         mPanelFragment.showGallery();
     }
 
@@ -308,7 +326,8 @@ public abstract class ChatFragment<InitModel>
 
     @Override
     public void onAdapterDataChanged() {
-        // 界面没有占位布局，Recycler是一直显示的，所有不需要做任何事情
+        // 当数据第一次加载完毕回调此方法或者当数据发生改变时回调
+        onBottomPanelOpened();
     }
 
     @Override

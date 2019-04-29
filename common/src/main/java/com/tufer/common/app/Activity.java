@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 
@@ -14,6 +15,7 @@ import android.view.Window;
 import com.tufer.common.widget.convention.PlaceHolderView;
 import com.tufer.utils.StatusBarUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -25,6 +27,29 @@ import butterknife.ButterKnife;
 public abstract class Activity extends AppCompatActivity {
 
     protected PlaceHolderView mPlaceHolderView;
+
+    private ArrayList<MyOnTouchListener> onTouchListeners = new ArrayList<>();
+
+    public interface MyOnTouchListener {
+        boolean onTouch(MotionEvent ev);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        for (MyOnTouchListener listener : onTouchListeners) {
+            if(listener != null) {
+                listener.onTouch(ev);
+            }
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+    public void registerMyOnTouchListener(MyOnTouchListener myOnTouchListener) {
+        onTouchListeners.add(myOnTouchListener);
+    }
+
+    public void unRegisterMyOnTouchListener(MyOnTouchListener myOnTouchListener) {
+        onTouchListeners.remove(myOnTouchListener) ;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
