@@ -30,4 +30,10 @@
 
     <!--应用图标的背景颜色-->
     <color name="ic_launcher_background">#3E99A6</color>
+
+    <!-- 描边颜色 -->
+    <color name="border_clo">#ccc</color>
+    <color name="text_clo">#333</color>
+    <color name="white">#fff</color>
+    <color name="blue">#8d9ca9</color>
 </resources>

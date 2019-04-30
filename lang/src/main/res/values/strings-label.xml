@@ -52,4 +52,9 @@
     <string name="toast_download_error">下载失败!</string>
 
     <string name="label_account_out_tip">您账号在别处登陆，导致被迫下线，若非本人行为，请尽快修改密码!</string>
+
+    <string name="label_setting_autograph">个性签名</string>
+    <string name="label_setting_data">我的资料</string>
+    <string name="label_setting_message_notification">消息通知</string>
+    <string name="label_setting_auxiliary_function">辅助功能</string>
 </resources>

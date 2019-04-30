@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F0F3F6"
+    android:orientation="vertical">
+
+    <LinearLayout style="@style/wrap_layout">
+        <!-- 上圆角-->
+        <LinearLayout
+            android:id="@+id/lay_autograph"
+            style="@style/top_layout">
+
+            <TextView
+                style="@style/text_style"
+                android:text="@string/label_setting_autograph" />
+
+            <ImageView style="@style/img_arrow" />
+
+        </LinearLayout>
+
+        <!-- 分割线 -->
+        <View style="@style/bg_line" />
+
+        <!-- 无圆角-->
+        <LinearLayout
+            android:id="@+id/lay_data"
+            style="@style/mid_layout">
+
+            <TextView
+                style="@style/text_style"
+                android:text="@string/label_setting_data" />
+
+            <ImageView style="@style/img_arrow" />
+
+        </LinearLayout>
+
+        <View style="@style/bg_line" />
+        <!-- 下圆角-->
+        <LinearLayout
+            android:id="@+id/lay_notification"
+            style="@style/bottom_layout">
+
+            <TextView
+                style="@style/text_style"
+                android:text="@string/label_setting_message_notification" />
+
+            <ImageView style="@style/img_arrow" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <!-- 全圆角-->
+    <LinearLayout style="@style/wrap_layout">
+
+        <LinearLayout
+            android:id="@+id/lay_function"
+            style="@style/single_layout">
+
+            <TextView
+                style="@style/text_style"
+                android:text="@string/label_setting_auxiliary_function" />
+
+            <ImageView style="@style/img_arrow" />
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

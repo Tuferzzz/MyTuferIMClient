@@ -197,9 +197,11 @@ public class MainActivity extends PresenterActivity<OutAccountContract.Presenter
             case R.id.nav_my_data:
             case R.id.nav_my_news:
             case R.id.nav_my_album:
-            case R.id.nav_setting:
                 Toast.makeText(this,item.getTitle(),Toast.LENGTH_LONG).show();
                 mDrawerLayout.closeDrawer(GravityCompat.START);
+                return true;
+            case R.id.nav_setting:
+                SettingActivity.show(this);
                 return true;
             case R.id.nav_accout:
                 mPresenter.outAccount();
