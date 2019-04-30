@@ -1,7 +1,11 @@
 package com.tufer.common.app;
 
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.StringRes;
@@ -21,12 +25,15 @@ import java.util.List;
 public class Application extends android.app.Application {
     private static Application instance;
     private List<Activity> activities = new ArrayList<>();
+    public static final String PUSH_MESSAGE_CHANNEL_ID = "PUSH_MESSAGE_NOTIFY_ID";
+    public static final String PUSH_CHANNEL_NAME = "新消息";
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
 
+        initNotificationChannel();
 
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
@@ -64,6 +71,25 @@ public class Application extends android.app.Application {
                 activities.remove(activity);
             }
         });
+    }
+
+    private void initNotificationChannel() {
+        NotificationChannel channel = null;
+        if (channel == null) {
+            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                channel = notificationManager.getNotificationChannel(PUSH_MESSAGE_CHANNEL_ID);
+                if (channel == null) {
+                    channel = new NotificationChannel(PUSH_MESSAGE_CHANNEL_ID, PUSH_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
+                    channel.enableLights(true);//是否在桌面icon右上角展示小红点
+                    channel.setLightColor(Color.RED);//小红点颜色
+                    channel.setShowBadge(false); //是否在久按桌面图标时显示此渠道的通知
+                    if (notificationManager != null) {
+                        notificationManager.createNotificationChannel(channel);
+                    }
+                }
+            }
+        }
     }
 
     // 退出所有
