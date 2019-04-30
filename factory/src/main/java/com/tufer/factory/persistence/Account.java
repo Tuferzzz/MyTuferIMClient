@@ -1,10 +1,16 @@
 package com.tufer.factory.persistence;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
 import android.text.TextUtils;
 
 import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.tufer.common.app.Application;
 import com.tufer.factory.Factory;
 import com.tufer.factory.model.api.account.AccountRspModel;
 import com.tufer.factory.model.db.User;
@@ -21,6 +27,7 @@ public class Account {
     private static final String KEY_TOKEN = "KEY_TOKEN";
     private static final String KEY_USER_ID = "KEY_USER_ID";
     private static final String KEY_ACCOUNT = "KEY_ACCOUNT";
+    private static final String KEY_NOTIFICATION = "KEY_NOTIFICATION";
 
     // 设备的推送Id
     private static String pushId;
@@ -32,7 +39,20 @@ public class Account {
     private static String userId;
     // 登录的账户
     private static String account;
+    //提示音
+    private static Uri notification= getNotificationUri(Factory.app());
 
+    public static Uri getNotificationUri(Context context){
+        Uri notification;
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = notificationManager.getNotificationChannel(Application.PUSH_MESSAGE_CHANNEL_ID);
+            notification = channel.getSound();
+        }else{
+            notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        }
+        return notification;
+    }
 
     /**
      * 存储数据到XML文件，持久化
@@ -48,6 +68,7 @@ public class Account {
                 .putString(KEY_TOKEN, token)
                 .putString(KEY_USER_ID, userId)
                 .putString(KEY_ACCOUNT, account)
+                .putString(KEY_NOTIFICATION, notification==null?"":notification.toString())
                 .apply();
     }
 
@@ -62,6 +83,7 @@ public class Account {
         token = sp.getString(KEY_TOKEN, "");
         userId = sp.getString(KEY_USER_ID, "");
         account = sp.getString(KEY_ACCOUNT, "");
+        notification = Uri.parse(sp.getString(KEY_NOTIFICATION, ""));
     }
 
 
@@ -147,6 +169,7 @@ public class Account {
         Account.account = "";
         Account.userId = "";
         Account.isBind = false;
+        Account.notification = null;
         save(Factory.app());
     }
 
@@ -179,5 +202,14 @@ public class Account {
      */
     public static String getToken() {
         return token;
+    }
+
+    public static Uri getNotification() {
+        return notification;
+    }
+
+    public static void setNotification(Uri notification) {
+        Account.notification = notification;
+        Account.save(Factory.app());
     }
 }

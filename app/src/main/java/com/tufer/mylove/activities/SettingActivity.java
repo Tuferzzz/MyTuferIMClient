@@ -2,18 +2,22 @@ package com.tufer.mylove.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.widget.LinearLayout;
 
 import com.tufer.common.app.Application;
 import com.tufer.common.app.ToolbarActivity;
 import com.tufer.common.tools.SingleClickHelper;
+import com.tufer.factory.persistence.Account;
 import com.tufer.mylove.R;
 import com.tufer.utils.NotificationUtil;
 
 import butterknife.BindView;
 
 public class SettingActivity extends ToolbarActivity {
+
+    private static final int NOTIFICATION_REQUESTCODE =1;
 
     @BindView(R.id.lay_account)
     LinearLayout account;
@@ -67,6 +71,14 @@ public class SettingActivity extends ToolbarActivity {
     @Override
     protected void initWidget() {
         super.initWidget();
-        SingleClickHelper.click(newMessageNotification,v -> NotificationUtil.gotoNotificationChannelSetting(this, Application.PUSH_MESSAGE_CHANNEL_ID,10));
+        SingleClickHelper.click(newMessageNotification,v -> NotificationUtil.gotoNotificationChannelSetting(this, Application.PUSH_MESSAGE_CHANNEL_ID,NOTIFICATION_REQUESTCODE));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode==NOTIFICATION_REQUESTCODE){
+            Account.setNotification(Account.getNotificationUri(this));
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

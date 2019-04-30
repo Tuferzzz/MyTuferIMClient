@@ -251,14 +251,7 @@ public class Factory {
 
     //提示音
     private static void startAlarm(Context context) {
-        Uri notification;
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = notificationManager.getNotificationChannel(Application.PUSH_MESSAGE_CHANNEL_ID);
-            notification = channel.getSound();
-        }else{
-            notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        }
+        Uri notification = Account.getNotification();
         if (notification == null) return;
         Ringtone r = RingtoneManager.getRingtone(context, notification);
         r.play();

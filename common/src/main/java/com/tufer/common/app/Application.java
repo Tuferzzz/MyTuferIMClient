@@ -27,6 +27,7 @@ public class Application extends android.app.Application {
     private List<Activity> activities = new ArrayList<>();
     public static final String PUSH_MESSAGE_CHANNEL_ID = "PUSH_MESSAGE_NOTIFY_ID";
     public static final String PUSH_CHANNEL_NAME = "新消息";
+    public static NotificationChannel channel = null;
 
     @Override
     public void onCreate() {
@@ -74,7 +75,6 @@ public class Application extends android.app.Application {
     }
 
     private void initNotificationChannel() {
-        NotificationChannel channel = null;
         if (channel == null) {
             NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
