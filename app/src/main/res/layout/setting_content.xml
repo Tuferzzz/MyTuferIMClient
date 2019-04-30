@@ -6,14 +6,29 @@
     android:orientation="vertical">
 
     <LinearLayout style="@style/wrap_layout">
+
+        <LinearLayout
+            android:id="@+id/lay_account"
+            style="@style/single_layout">
+
+            <TextView
+                style="@style/text_style"
+                android:text="@string/label_setting_account" />
+
+            <ImageView style="@style/img_arrow" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout style="@style/wrap_layout">
         <!-- 上圆角-->
         <LinearLayout
-            android:id="@+id/lay_autograph"
+            android:id="@+id/lay_new_message_notification"
             style="@style/top_layout">
 
             <TextView
                 style="@style/text_style"
-                android:text="@string/label_setting_autograph" />
+                android:text="@string/label_setting_new_message_notification" />
 
             <ImageView style="@style/img_arrow" />
 
@@ -24,12 +39,40 @@
 
         <!-- 无圆角-->
         <LinearLayout
-            android:id="@+id/lay_data"
+            android:id="@+id/lay_wurao_pattern"
             style="@style/mid_layout">
 
             <TextView
                 style="@style/text_style"
-                android:text="@string/label_setting_data" />
+                android:text="@string/label_setting_wurao_pattern" />
+
+            <ImageView style="@style/img_arrow" />
+
+        </LinearLayout>
+
+        <View style="@style/bg_line" />
+        <!-- 无圆角-->
+        <LinearLayout
+            android:id="@+id/lay_chat"
+            style="@style/mid_layout">
+
+            <TextView
+                style="@style/text_style"
+                android:text="@string/label_setting_chat" />
+
+            <ImageView style="@style/img_arrow" />
+
+        </LinearLayout>
+
+        <View style="@style/bg_line" />
+        <!-- 无圆角-->
+        <LinearLayout
+            android:id="@+id/lay_privacy"
+            style="@style/mid_layout">
+
+            <TextView
+                style="@style/text_style"
+                android:text="@string/label_setting_privacy" />
 
             <ImageView style="@style/img_arrow" />
 
@@ -38,12 +81,12 @@
         <View style="@style/bg_line" />
         <!-- 下圆角-->
         <LinearLayout
-            android:id="@+id/lay_notification"
+            android:id="@+id/lay_currency"
             style="@style/bottom_layout">
 
             <TextView
                 style="@style/text_style"
-                android:text="@string/label_setting_message_notification" />
+                android:text="@string/label_setting_currency" />
 
             <ImageView style="@style/img_arrow" />
 
@@ -51,20 +94,67 @@
 
     </LinearLayout>
 
-
-    <!-- 全圆角-->
     <LinearLayout style="@style/wrap_layout">
-
+        <!-- 上圆角-->
         <LinearLayout
-            android:id="@+id/lay_function"
-            style="@style/single_layout">
+            android:id="@+id/lay_about"
+            style="@style/top_layout">
 
             <TextView
                 style="@style/text_style"
-                android:text="@string/label_setting_auxiliary_function" />
+                android:text="@string/label_setting_about" />
 
             <ImageView style="@style/img_arrow" />
 
         </LinearLayout>
+
+        <!-- 分割线 -->
+        <View style="@style/bg_line" />
+
+        <!-- 下圆角-->
+        <LinearLayout
+            android:id="@+id/lay_help"
+            style="@style/bottom_layout">
+
+            <TextView
+                style="@style/text_style"
+                android:text="@string/label_setting_help" />
+
+            <ImageView style="@style/img_arrow" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout style="@style/wrap_layout">
+        <!-- 上圆角-->
+        <LinearLayout
+            android:id="@+id/lay_switch_account"
+            style="@style/top_layout">
+
+            <TextView
+                style="@style/text_style"
+                android:text="@string/label_setting_switch_account" />
+
+            <ImageView style="@style/img_arrow" />
+
+        </LinearLayout>
+
+        <!-- 分割线 -->
+        <View style="@style/bg_line" />
+
+        <!-- 下圆角-->
+        <LinearLayout
+            android:id="@+id/lay_exit"
+            style="@style/bottom_layout">
+
+            <TextView
+                style="@style/text_style"
+                android:text="@string/label_setting_exit" />
+
+            <ImageView style="@style/img_arrow" />
+
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

@@ -53,8 +53,14 @@
 
     <string name="label_account_out_tip">您账号在别处登陆，导致被迫下线，若非本人行为，请尽快修改密码!</string>
 
-    <string name="label_setting_autograph">个性签名</string>
-    <string name="label_setting_data">我的资料</string>
-    <string name="label_setting_message_notification">消息通知</string>
-    <string name="label_setting_auxiliary_function">辅助功能</string>
+    <string name="label_setting_account">账号与安全</string>
+    <string name="label_setting_new_message_notification">新消息提醒</string>
+    <string name="label_setting_wurao_pattern">勿扰模式</string>
+    <string name="label_setting_chat">聊天</string>
+    <string name="label_setting_privacy">隐私</string>
+    <string name="label_setting_currency">通用</string>
+    <string name="label_setting_about">关于TuferIM</string>
+    <string name="label_setting_help">帮助与反馈</string>
+    <string name="label_setting_switch_account">切换账户</string>
+    <string name="label_setting_exit">安全退出</string>
 </resources>

@@ -14,8 +14,35 @@ import butterknife.BindView;
 
 public class SettingActivity extends ToolbarActivity {
 
-    @BindView(R.id.lay_notification)
-    LinearLayout notification;
+    @BindView(R.id.lay_account)
+    LinearLayout account;
+
+    @BindView(R.id.lay_new_message_notification)
+    LinearLayout newMessageNotification;
+
+    @BindView(R.id.lay_wurao_pattern)
+    LinearLayout wuraoPattern;
+
+    @BindView(R.id.lay_chat)
+    LinearLayout chat;
+
+    @BindView(R.id.lay_privacy)
+    LinearLayout privacy;
+
+    @BindView(R.id.lay_currency)
+    LinearLayout currency;
+
+    @BindView(R.id.lay_about)
+    LinearLayout about;
+
+    @BindView(R.id.lay_help)
+    LinearLayout help;
+
+    @BindView(R.id.lay_switch_account)
+    LinearLayout switchAccount;
+
+    @BindView(R.id.lay_exit)
+    LinearLayout exit;
 
     public static void show(Context context) {
         Intent intent = new Intent(context, SettingActivity.class);
@@ -39,6 +66,6 @@ public class SettingActivity extends ToolbarActivity {
     @Override
     protected void initWidget() {
         super.initWidget();
-        notification.setOnClickListener(v -> NotificationUtil.gotoNotificationChannelSetting(this, Application.PUSH_MESSAGE_CHANNEL_ID,10));
+        newMessageNotification.setOnClickListener(v -> NotificationUtil.gotoNotificationChannelSetting(this, Application.PUSH_MESSAGE_CHANNEL_ID,10));
     }
 }
