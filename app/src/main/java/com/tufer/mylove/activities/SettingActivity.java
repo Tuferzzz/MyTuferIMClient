@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 
 import com.tufer.common.app.Application;
 import com.tufer.common.app.ToolbarActivity;
+import com.tufer.common.tools.SingleClickHelper;
 import com.tufer.mylove.R;
 import com.tufer.utils.NotificationUtil;
 
@@ -66,6 +67,6 @@ public class SettingActivity extends ToolbarActivity {
     @Override
     protected void initWidget() {
         super.initWidget();
-        newMessageNotification.setOnClickListener(v -> NotificationUtil.gotoNotificationChannelSetting(this, Application.PUSH_MESSAGE_CHANNEL_ID,10));
+        SingleClickHelper.click(newMessageNotification,v -> NotificationUtil.gotoNotificationChannelSetting(this, Application.PUSH_MESSAGE_CHANNEL_ID,10));
     }
 }

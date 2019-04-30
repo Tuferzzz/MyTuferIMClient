@@ -118,7 +118,6 @@
             android:theme="@style/AppTheme.TransStatusBar" />
         <activity
             android:name=".activities.SettingActivity"
-            android:launchMode="singleInstance"
             android:theme="@style/AppTheme.TransStatusBar" />
     </application>
 
