@@ -22,6 +22,7 @@ public class MessageCard {
     private String groupId;
     private String senderId;
     private String receiverId;
+    private int isRead;
 
     // 两个额外的本地字段
     // transient 不会被Gson序列化和反序列化
@@ -92,6 +93,14 @@ public class MessageCard {
         this.receiverId = receiverId;
     }
 
+    public int getIsRead() {
+        return isRead;
+    }
+
+    public void setIsRead(int isRead) {
+        this.isRead = isRead;
+    }
+
     public int getStatus() {
         return status;
     }
@@ -118,6 +127,7 @@ public class MessageCard {
         message.setGroup(group);
         message.setSender(sender);
         message.setReceiver(receiver);
+        message.setIsRead(isRead);
         message.setStatus(status);
         return message;
     }

@@ -1,6 +1,7 @@
 package com.tufer.factory.model.db;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.ForeignKey;
@@ -54,6 +55,7 @@ public class Session extends BaseDbModel<Session> {
         if (message.getGroup() == null) {
             receiverType = Message.RECEIVER_TYPE_NONE;
             User other = message.getOther();
+            other.load();
             id = other.getId();
             picture = other.getPortrait();
             title = other.getName();
@@ -192,6 +194,7 @@ public class Session extends BaseDbModel<Session> {
      * 刷新会话对应的信息为当前Message的最新状态
      */
     public void refreshToNow() {
+        Log.e("Tufer", "refreshToNow: "+this );
         Message message;
         if (receiverType == Message.RECEIVER_TYPE_GROUP) {
             // 刷新当前对应的群的相关信息
@@ -225,7 +228,11 @@ public class Session extends BaseDbModel<Session> {
                 this.message = message;
                 this.content = message.getSampleContent();
                 this.modifyAt = message.getCreateAt();
-                this.unReadCount++;
+                if(message.getIsRead()==Message.ISREAD_TRUE){
+                    this.unReadCount=0;
+                }else {
+                    this.unReadCount++;
+                }
             }
         } else {
             // 和人聊天的
@@ -262,7 +269,11 @@ public class Session extends BaseDbModel<Session> {
                 this.message = message;
                 this.content = message.getSampleContent();
                 this.modifyAt = message.getCreateAt();
-                this.unReadCount++;
+                if(message.getIsRead()==Message.ISREAD_TRUE){
+                    this.unReadCount=0;
+                }else {
+                    this.unReadCount++;
+                }
             }
         }
     }
@@ -297,5 +308,19 @@ public class Session extends BaseDbModel<Session> {
             result = 31 * result + type;
             return result;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Session{" +
+                "id='" + id + '\'' +
+                ", picture='" + picture + '\'' +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", receiverType=" + receiverType +
+                ", unReadCount=" + unReadCount +
+                ", modifyAt=" + modifyAt +
+                ", message=" + message +
+                '}';
     }
 }

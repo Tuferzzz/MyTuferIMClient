@@ -36,6 +36,7 @@ import com.tufer.common.widget.PortraitView;
 import com.tufer.common.widget.adapter.TextWatcherAdapter;
 import com.tufer.common.widget.recycler.RecyclerAdapter;
 import com.tufer.face.Face;
+import com.tufer.factory.data.helper.DbHelper;
 import com.tufer.factory.model.db.Message;
 import com.tufer.factory.model.db.User;
 import com.tufer.factory.persistence.Account;
@@ -446,6 +447,11 @@ public abstract class ChatFragment<InitModel>
 
                 // 当状态是错误状态时才允许点击
                 mPortrait.setEnabled(status == Message.STATUS_FAILED);
+            }
+
+            if(message.getIsRead()==Message.ISREAD_FALSE){
+                message.setIsRead(Message.ISREAD_TRUE);
+                DbHelper.save(Message.class,message);
             }
         }
 

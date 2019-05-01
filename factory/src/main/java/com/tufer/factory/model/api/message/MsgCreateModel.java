@@ -19,6 +19,8 @@ public class MsgCreateModel {
 
     // 消息类型
     private int type = Message.TYPE_STR;
+    //通过此model构建的消息一定是发送给别人的消息，那默认是已读
+    private transient int isRead = Message.ISREAD_TRUE;
 
     // 接收者 可为空
     private String receiverId;
@@ -47,6 +49,10 @@ public class MsgCreateModel {
         return type;
     }
 
+    public int getIsRead() {
+        return isRead;
+    }
+
     public String getReceiverId() {
         return receiverId;
     }
@@ -68,6 +74,7 @@ public class MsgCreateModel {
             card.setContent(content);
             card.setAttach(attach);
             card.setType(type);
+            card.setIsRead(isRead);
             card.setSenderId(Account.getUserId());
 
             // 如果是群

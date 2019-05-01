@@ -30,6 +30,9 @@ public class Message extends BaseDbModel<Message> implements Serializable {
     public static final int TYPE_FILE = 3;
     public static final int TYPE_AUDIO = 4;
 
+    public static final int ISREAD_TRUE = 1;
+    public static final int ISREAD_FALSE = 0;
+
     // 消息状态
     public static final int STATUS_DONE = 0; // 正常状态
     public static final int STATUS_CREATED = 1; // 创建状态
@@ -47,6 +50,8 @@ public class Message extends BaseDbModel<Message> implements Serializable {
     private Date createAt;// 创建时间
     @Column
     private int status;// 当前消息的状态
+    @Column
+    private int isRead;// 是否已读
 
     @ForeignKey(tableClass = Group.class, stubbedRelationship = true)
     private Group group;// 接收者群外键
@@ -104,6 +109,14 @@ public class Message extends BaseDbModel<Message> implements Serializable {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public int getIsRead() {
+        return isRead;
+    }
+
+    public void setIsRead(int isRead) {
+        this.isRead = isRead;
     }
 
     public Group getGroup() {
@@ -171,6 +184,7 @@ public class Message extends BaseDbModel<Message> implements Serializable {
 
         return type == message.type
                 && status == message.status
+                && isRead == message.isRead
                 && Objects.equals(id, message.id)
                 && Objects.equals(content, message.content)
                 && Objects.equals(attach, message.attach)
@@ -196,6 +210,6 @@ public class Message extends BaseDbModel<Message> implements Serializable {
         // 对于同一个消息当中的字段是否有不同
         // 这里，对于消息，本身消息不可进行修改；只能添加删除
         // 唯一会变化的就是本地（手机端）消息的状态会改变
-        return oldT == this || status == oldT.status;
+        return oldT == this || (status == oldT.status && isRead == oldT.isRead);
     }
 }

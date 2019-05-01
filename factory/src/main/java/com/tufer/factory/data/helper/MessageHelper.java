@@ -55,7 +55,7 @@ public class MessageHelper {
                     return;
 
 
-                // 我们在发送的时候需要通知界面更新状态，Card;
+                // 我们在发送的时候需要把数据存储本地并通知界面更新状态，Card;
                 final MessageCard card = model.buildCard();
                 Factory.getMessageCenter().dispatch(card);
 
@@ -110,6 +110,7 @@ public class MessageHelper {
                             MessageCard rspCard = rspModel.getResult();
                             if (rspCard != null) {
                                 // 成功的调度
+                                rspCard.setIsRead(Message.ISREAD_TRUE);
                                 Factory.getMessageCenter().dispatch(rspCard);
                             }
                         } else {
