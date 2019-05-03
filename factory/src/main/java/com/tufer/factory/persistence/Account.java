@@ -10,7 +10,6 @@ import android.os.Build;
 import android.text.TextUtils;
 
 import com.raizlabs.android.dbflow.sql.language.SQLite;
-import com.tufer.common.app.Application;
 import com.tufer.factory.Factory;
 import com.tufer.factory.model.api.account.AccountRspModel;
 import com.tufer.factory.model.db.User;
@@ -27,7 +26,6 @@ public class Account {
     private static final String KEY_TOKEN = "KEY_TOKEN";
     private static final String KEY_USER_ID = "KEY_USER_ID";
     private static final String KEY_ACCOUNT = "KEY_ACCOUNT";
-    private static final String KEY_NOTIFICATION = "KEY_NOTIFICATION";
 
     // 设备的推送Id
     private static String pushId;
@@ -46,7 +44,7 @@ public class Account {
         Uri notification;
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = notificationManager.getNotificationChannel(Application.PUSH_MESSAGE_CHANNEL_ID);
+            NotificationChannel channel = notificationManager.getNotificationChannel("NEWMESSAGE");
             notification = channel.getSound();
         }else{
             notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -68,7 +66,6 @@ public class Account {
                 .putString(KEY_TOKEN, token)
                 .putString(KEY_USER_ID, userId)
                 .putString(KEY_ACCOUNT, account)
-                .putString(KEY_NOTIFICATION, notification==null?"":notification.toString())
                 .apply();
     }
 
@@ -83,7 +80,6 @@ public class Account {
         token = sp.getString(KEY_TOKEN, "");
         userId = sp.getString(KEY_USER_ID, "");
         account = sp.getString(KEY_ACCOUNT, "");
-        notification = Uri.parse(sp.getString(KEY_NOTIFICATION, ""));
     }
 
 
@@ -205,11 +201,10 @@ public class Account {
     }
 
     public static Uri getNotification() {
-        return notification;
+        return notification==null?getNotificationUri(Factory.app()):notification;
     }
 
     public static void setNotification(Uri notification) {
         Account.notification = notification;
-        Account.save(Factory.app());
     }
 }

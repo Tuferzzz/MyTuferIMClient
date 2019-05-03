@@ -1,4 +1,4 @@
-package com.tufer.utils;
+package com.tufer.mylove.notification;
 
 import android.app.Activity;
 import android.app.AppOpsManager;

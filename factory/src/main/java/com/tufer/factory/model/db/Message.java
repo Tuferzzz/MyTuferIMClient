@@ -165,7 +165,7 @@ public class Message extends BaseDbModel<Message> implements Serializable {
      *
      * @return 一个消息描述
      */
-    String getSampleContent() {
+    public String getSampleContent() {
         if (type == TYPE_PIC)
             return "[图片]";
         else if (type == TYPE_AUDIO)

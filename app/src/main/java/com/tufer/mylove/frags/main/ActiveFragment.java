@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -44,6 +43,11 @@ public class ActiveFragment extends PresenterFragment<SessionContract.Presenter>
         // Required empty public constructor
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getRecyclerAdapter().notifyDataSetChanged();
+    }
 
     @Override
     protected int getContentLayoutId() {
@@ -71,7 +75,6 @@ public class ActiveFragment extends PresenterFragment<SessionContract.Presenter>
             @Override
             public void onItemClick(RecyclerAdapter.ViewHolder holder, Session session) {
                 session.setUnReadCount(0);
-                Log.e("Tufer", "onItemClick: "+session );
                 DbHelper.save(Session.class, session);
                 holder.updateData(session);
                 MessageActivity.show(getContext(), session);

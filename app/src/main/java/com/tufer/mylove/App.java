@@ -8,6 +8,8 @@ import com.igexin.sdk.PushManager;
 import com.mob.MobSDK;
 import com.tufer.common.app.Application;
 import com.tufer.factory.Factory;
+import com.tufer.mylove.notification.NotificationChannels;
+
 /**
  * Created by Tufer on 2018/4/10 0010.
  */
@@ -16,6 +18,10 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        //初始化通知通道
+        NotificationChannels.createAllNotificationChannels(this);
+
         Factory.setup();
 
         // 注册生命周期

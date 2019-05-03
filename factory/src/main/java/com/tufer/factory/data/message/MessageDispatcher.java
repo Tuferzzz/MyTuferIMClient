@@ -1,7 +1,14 @@
 package com.tufer.factory.data.message;
 
+import android.content.Context;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.text.TextUtils;
 
+import com.tufer.common.app.Application;
+import com.tufer.factory.Factory;
+import com.tufer.factory.Notificaitons;
 import com.tufer.factory.data.helper.DbHelper;
 import com.tufer.factory.data.helper.GroupHelper;
 import com.tufer.factory.data.helper.MessageHelper;
@@ -11,6 +18,7 @@ import com.tufer.factory.model.card.MessageCard;
 import com.tufer.factory.model.db.Group;
 import com.tufer.factory.model.db.Message;
 import com.tufer.factory.model.db.User;
+import com.tufer.factory.persistence.Account;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,10 +124,55 @@ public class MessageDispatcher implements MessageCenter {
 
                     message = card.build(sender, receiver, group);
                 }
+                //发送通知给用户
+                sendNotification(message);
                 messages.add(message);
             }
             if (messages.size() > 0)
                 DbHelper.save(Message.class, messages.toArray(new Message[0]));
         }
+    }
+
+    private static void sendNotification(Message message) {
+        if (!Application.isMessageActivityShow) {
+            Notificaitons.getInstance().sendNewMessageNotification(Factory.app(), Factory.app().getNotificationManager(), message);
+        } else {
+            if (message.getIsRead() == Message.ISREAD_FALSE) {
+                //说明有新消息过来
+                if (message.getGroup() != null) {
+                    //说明有群发消息过来
+                    if (Application.isGroup) {
+                        //当前就在群里面
+                        if (Application.receiverId .equals(message.getGroup().getId()) ) {
+                            startAlarm(Factory.app());
+                        } else {
+                            Notificaitons.getInstance().sendNewMessageNotification(Factory.app(), Factory.app().getNotificationManager(), message);
+                        }
+                    } else {
+                        //当前在和人聊天中
+                        Notificaitons.getInstance().sendNewMessageNotification(Factory.app(), Factory.app().getNotificationManager(), message);
+                    }
+                } else {
+                    //说明有人发消息过来
+                    if (Application.isGroup) {
+                        Notificaitons.getInstance().sendNewMessageNotification(Factory.app(), Factory.app().getNotificationManager(), message);
+                    } else {
+                        if (message.getSender().getId().equals(Application.receiverId) ) {
+                            startAlarm(Factory.app());
+                        } else {
+                            Notificaitons.getInstance().sendNewMessageNotification(Factory.app(), Factory.app().getNotificationManager(), message);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    //提示音
+    private static void startAlarm(Context context) {
+        Uri notification = Account.getNotification();
+        if (notification == null) return;
+        Ringtone r = RingtoneManager.getRingtone(context, notification);
+        r.play();
     }
 }

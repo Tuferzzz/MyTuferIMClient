@@ -58,7 +58,6 @@
             android:label="AppMessageReceiverService"
             android:permission="1000" />
 
-
         <activity
             android:name=".LaunchActivity"
             android:label="@string/title_activity_launch"

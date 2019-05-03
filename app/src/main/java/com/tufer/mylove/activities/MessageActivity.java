@@ -5,8 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
+
 import com.tufer.common.app.Activity;
+import com.tufer.common.app.Application;
 import com.tufer.common.app.Fragment;
+import com.tufer.factory.Factory;
+import com.tufer.factory.Notificaitons;
 import com.tufer.factory.model.Author;
 import com.tufer.factory.model.db.Group;
 import com.tufer.factory.model.db.Message;
@@ -20,7 +24,7 @@ public class MessageActivity extends Activity {
     // 接收者Id，可以是群，也可以是人的Id
     public static final String KEY_RECEIVER_ID = "KEY_RECEIVER_ID";
     // 是否是群
-    private static final String KEY_RECEIVER_IS_GROUP = "KEY_RECEIVER_IS_GROUP";
+    public static final String KEY_RECEIVER_IS_GROUP = "KEY_RECEIVER_IS_GROUP";
 
     private String mReceiverId;
     private boolean mIsGroup;
@@ -101,5 +105,39 @@ public class MessageActivity extends Activity {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.lay_container, fragment)
                 .commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Application.isMessageActivityShow=false;
+        MainActivity.show(this);
+        finish();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Application.isMessageActivityShow=false;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Application.isMessageActivityShow=false;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Application.isMessageActivityShow=false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Application.isMessageActivityShow=true;
+        Application.receiverId=mReceiverId;
+        Application.isGroup=mIsGroup;
+        Factory.app().getNotificationManager().cancel(mReceiverId,Notificaitons.NOTIFICATION_NEW_MESSAGE);
     }
 }

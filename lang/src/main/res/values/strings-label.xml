@@ -63,4 +63,8 @@
     <string name="label_setting_help">帮助与反馈</string>
     <string name="label_setting_switch_account">切换账户</string>
     <string name="label_setting_exit">安全退出</string>
+
+    <string name="label_channel_new_message">新消息通知</string>
+    <string name="label_channel_importance">重要通知</string>
+    <string name="label_channel_default">默认通知</string>
 </resources>

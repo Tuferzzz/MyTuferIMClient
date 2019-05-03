@@ -6,12 +6,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.widget.LinearLayout;
 
-import com.tufer.common.app.Application;
 import com.tufer.common.app.ToolbarActivity;
 import com.tufer.common.tools.SingleClickHelper;
 import com.tufer.factory.persistence.Account;
 import com.tufer.mylove.R;
-import com.tufer.utils.NotificationUtil;
+import com.tufer.mylove.notification.NotificationChannels;
+import com.tufer.mylove.notification.NotificationUtil;
 
 import butterknife.BindView;
 
@@ -71,7 +71,7 @@ public class SettingActivity extends ToolbarActivity {
     @Override
     protected void initWidget() {
         super.initWidget();
-        SingleClickHelper.click(newMessageNotification,v -> NotificationUtil.gotoNotificationChannelSetting(this, Application.PUSH_MESSAGE_CHANNEL_ID,NOTIFICATION_REQUESTCODE));
+        SingleClickHelper.click(newMessageNotification,v -> NotificationUtil.gotoNotificationChannelSetting(this, NotificationChannels.NEWMESSAGE,NOTIFICATION_REQUESTCODE));
     }
 
     @Override

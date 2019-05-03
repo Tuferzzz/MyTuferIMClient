@@ -1,16 +1,8 @@
 package com.tufer.factory;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Build;
 import android.support.annotation.StringRes;
 import android.util.Log;
-
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -249,14 +241,6 @@ public class Factory {
         app().finishAll();
     }
 
-    //提示音
-    private static void startAlarm(Context context) {
-        Uri notification = Account.getNotification();
-        if (notification == null) return;
-        Ringtone r = RingtoneManager.getRingtone(context, notification);
-        r.play();
-    }
-
     /**
      * 处理推送来的消息
      *
@@ -266,7 +250,6 @@ public class Factory {
         // 首先检查登录状态
         if (!Account.isLogin())
             return;
-        startAlarm(app());
         PushModel model = PushModel.decode(str);
         if (model == null)
             return;

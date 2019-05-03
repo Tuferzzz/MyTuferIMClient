@@ -43,6 +43,7 @@ import com.tufer.factory.persistence.Account;
 import com.tufer.factory.presenter.message.ChatContract;
 import com.tufer.factory.utils.FileCache;
 import com.tufer.mylove.R;
+import com.tufer.mylove.activities.MainActivity;
 import com.tufer.mylove.activities.MessageActivity;
 import com.tufer.mylove.frags.panel.PanelFragment;
 
@@ -258,7 +259,10 @@ public abstract class ChatFragment<InitModel>
     protected void initToolbar() {
         Toolbar toolbar = mToolbar;
         toolbar.setNavigationIcon(R.drawable.ic_back);
-        toolbar.setNavigationOnClickListener(v -> getActivity().finish());
+        toolbar.setNavigationOnClickListener(v -> {
+            MainActivity.show(getContext());
+            getActivity().finish();
+        });
     }
 
     //  给界面的Appbar设置一个监听，得到关闭与打开的时候的进度
