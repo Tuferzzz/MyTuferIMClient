@@ -51,16 +51,4 @@
         android:textSize="@dimen/font_12"
         tools:text="Mary Harmon" />
 
-    <ImageView
-        android:layout_width="@dimen/len_32"
-        android:layout_height="@dimen/len_32"
-        android:layout_gravity="end|center_vertical"
-        android:layout_marginEnd="@dimen/len_6"
-        android:background="@drawable/ic_touch_bg"
-        android:contentDescription="@string/app_name"
-        android:padding="@dimen/len_6"
-        android:scaleType="fitCenter"
-        android:src="@drawable/ic_chat_bubble"
-        android:tint="@color/textAccent" />
-
 </FrameLayout>

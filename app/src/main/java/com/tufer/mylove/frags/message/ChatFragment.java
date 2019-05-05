@@ -22,8 +22,6 @@ import com.bumptech.glide.Glide;
 
 import net.qiujuer.genius.kit.handler.Run;
 import net.qiujuer.genius.ui.Ui;
-import net.qiujuer.genius.ui.compat.UiCompat;
-import net.qiujuer.genius.ui.widget.Loading;
 import net.qiujuer.widget.airpanel.AirPanel;
 import net.qiujuer.widget.airpanel.Util;
 
@@ -410,10 +408,13 @@ public abstract class ChatFragment<InitModel>
         @BindView(R.id.im_portrait)
         PortraitView mPortrait;
 
-        // 允许为空，左边没有，右边有
         @Nullable
-        @BindView(R.id.loading)
-        Loading mLoading;
+        @BindView(R.id.txt_name)
+        TextView mName;
+
+        @Nullable
+        @BindView(R.id.iv_tips)
+        ImageView isSendFail;
 
 
         public BaseHolder(View itemView) {
@@ -427,28 +428,16 @@ public abstract class ChatFragment<InitModel>
             sender.load();
             // 头像加载
             mPortrait.setup(Glide.with(ChatFragment.this), sender);
+            if(mName!=null) mName.setText(sender.getName());
 
-            if (mLoading != null) {
-                // 当前布局应该是在右边
+            if(isSendFail!=null){
                 int status = message.getStatus();
-                if (status == Message.STATUS_DONE) {
+                if (status == Message.STATUS_FAILED) {
                     // 正常状态, 隐藏Loading
-                    mLoading.stop();
-                    mLoading.setVisibility(View.GONE);
-                } else if (status == Message.STATUS_CREATED) {
-                    // 正在发送中的状态
-                    mLoading.setVisibility(View.VISIBLE);
-                    mLoading.setProgress(0);
-                    mLoading.setForegroundColor(UiCompat.getColor(getResources(), R.color.colorAccent));
-                    mLoading.start();
-                } else if (status == Message.STATUS_FAILED) {
-                    // 发送失败状态, 允许重新发送
-                    mLoading.setVisibility(View.VISIBLE);
-                    mLoading.stop();
-                    mLoading.setProgress(1);
-                    mLoading.setForegroundColor(UiCompat.getColor(getResources(), R.color.alertImportant));
+                    isSendFail.setVisibility(View.VISIBLE);
+                }else{
+                    isSendFail.setVisibility(View.GONE);
                 }
-
                 // 当状态是错误状态时才允许点击
                 mPortrait.setEnabled(status == Message.STATUS_FAILED);
             }
@@ -463,7 +452,7 @@ public abstract class ChatFragment<InitModel>
         void onRePushClick() {
             // 重新发送
 
-            if (mLoading != null && mPresenter.rePush(mData)) {
+            if (isSendFail != null && mPresenter.rePush(mData)) {
                 // 必须是右边的才有可能需要重新发送
                 // 状态改变需要重新刷新界面当前的信息
                 updateData(mData);
