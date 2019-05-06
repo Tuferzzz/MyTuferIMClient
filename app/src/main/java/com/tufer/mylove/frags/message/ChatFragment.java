@@ -12,14 +12,15 @@ import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewStub;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
-
 import net.qiujuer.genius.kit.handler.Run;
 import net.qiujuer.genius.ui.Ui;
 import net.qiujuer.widget.airpanel.AirPanel;
@@ -62,7 +63,7 @@ public abstract class ChatFragment<InitModel>
 
     protected String mReceiverId;
     protected Adapter mAdapter;
-    private boolean isSoftKeyboardOpen=false;
+    private boolean isSoftKeyboardOpen = false;
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -83,17 +84,19 @@ public abstract class ChatFragment<InitModel>
     View mSubmit;
 
     // 控制顶部面板与软键盘过度的Boss控件
-     private MessageLayout mPanelBoss;
-     private PanelFragment mPanelFragment;
+    private MessageLayout mPanelBoss;
+    private PanelFragment mPanelFragment;
+    private DisplayMetrics dm;
 
     // 语音的基础
     private FileCache<AudioHolder> mAudioFileCache;
     private AudioPlayHelper<AudioHolder> mAudioPlayer;
 
     private Activity.MyOnTouchListener onTouchListener = ev -> {
-        if(ev.getAction()== KeyEvent.ACTION_DOWN){
-            if(mPanelBoss.isOpen()||isSoftKeyboardOpen){
-                if(ev.getY()<1100){
+        if (ev.getAction() == KeyEvent.ACTION_DOWN) {
+            if (mPanelBoss.isOpen() || isSoftKeyboardOpen) {
+                dm = getActivity().getApplicationContext().getResources().getDisplayMetrics();
+                if (ev.getY() < 420 * dm.density) {
                     mPanelBoss.closePanel();
                     Util.hideKeyboard(mContent);
                     return true;
@@ -120,7 +123,7 @@ public abstract class ChatFragment<InitModel>
 
     @Override
     protected void initWidget(View root) {
-        ((Activity)getActivity()).registerMyOnTouchListener(onTouchListener);
+        ((Activity) getActivity()).registerMyOnTouchListener(onTouchListener);
         // 拿到占位布局
         // 替换顶部布局一定需要发生在super之前
         // 防止控件绑定异常
@@ -132,7 +135,7 @@ public abstract class ChatFragment<InitModel>
         super.initWidget(root);
 
         // 初始化面板操作
-        mPanelBoss =  root.findViewById(R.id.lay_content);
+        mPanelBoss = root.findViewById(R.id.lay_content);
         mPanelBoss.setup(() -> {
             // 请求隐藏软键盘
             Util.hideKeyboard(mContent);
@@ -148,11 +151,11 @@ public abstract class ChatFragment<InitModel>
             @Override
             public void onSoftKeyboardStateChanged(boolean isOpen) {
                 // 软键盘改变
-                if (isOpen){
+                if (isOpen) {
                     onBottomPanelOpened();
-                    isSoftKeyboardOpen=true;
-                }else {
-                    isSoftKeyboardOpen=false;
+                    isSoftKeyboardOpen = true;
+                } else {
+                    isSoftKeyboardOpen = false;
                 }
             }
         });
@@ -167,16 +170,6 @@ public abstract class ChatFragment<InitModel>
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new Adapter();
         mRecyclerView.setAdapter(mAdapter);
-        // 添加适配器监听器，进行点击的实现
-        mAdapter.setListener(new RecyclerAdapter.AdapterListenerImpl<Message>() {
-            @Override
-            public void onItemClick(RecyclerAdapter.ViewHolder holder, Message message) {
-                if (message.getType() == Message.TYPE_AUDIO && holder instanceof ChatFragment.AudioHolder) {
-                    // 权限的判断，当然权限已经全局申请了
-                    mAudioFileCache.download((ChatFragment.AudioHolder) holder, message.getContent());
-                }
-            }
-        });
     }
 
     @Override
@@ -225,7 +218,7 @@ public abstract class ChatFragment<InitModel>
     public void onDestroy() {
         super.onDestroy();
         mAudioPlayer.destroy();
-        ((Activity)getActivity()).unRegisterMyOnTouchListener(onTouchListener);
+        ((Activity) getActivity()).unRegisterMyOnTouchListener(onTouchListener);
     }
 
     private void onBottomPanelOpened() {
@@ -288,7 +281,7 @@ public abstract class ChatFragment<InitModel>
     @OnClick(R.id.btn_face)
     void onFaceClick() {
         // 仅仅只需请求打开即可
-        if(!mPanelBoss.isOpen()){
+        if (!mPanelBoss.isOpen()) {
             mPanelBoss.openPanel();
         }
         mPanelFragment.showFace();
@@ -296,7 +289,7 @@ public abstract class ChatFragment<InitModel>
 
     @OnClick(R.id.btn_record)
     void onRecordClick() {
-        if(!mPanelBoss.isOpen()){
+        if (!mPanelBoss.isOpen()) {
             mPanelBoss.openPanel();
         }
         mPanelFragment.showRecord();
@@ -316,7 +309,7 @@ public abstract class ChatFragment<InitModel>
     }
 
     private void onMoreClick() {
-        if(!mPanelBoss.isOpen()){
+        if (!mPanelBoss.isOpen()) {
             mPanelBoss.openPanel();
         }
         mPanelFragment.showGallery();
@@ -408,7 +401,6 @@ public abstract class ChatFragment<InitModel>
         @BindView(R.id.im_portrait)
         PortraitView mPortrait;
 
-        @Nullable
         @BindView(R.id.txt_name)
         TextView mName;
 
@@ -428,36 +420,34 @@ public abstract class ChatFragment<InitModel>
             sender.load();
             // 头像加载
             mPortrait.setup(Glide.with(ChatFragment.this), sender);
-            if(mName!=null) mName.setText(sender.getName());
+            mName.setText(sender.getName());
 
-            if(isSendFail!=null){
+            if (isSendFail != null) {
                 int status = message.getStatus();
                 if (status == Message.STATUS_FAILED) {
                     // 正常状态, 隐藏Loading
                     isSendFail.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     isSendFail.setVisibility(View.GONE);
                 }
                 // 当状态是错误状态时才允许点击
                 mPortrait.setEnabled(status == Message.STATUS_FAILED);
             }
 
-            if(message.getIsRead()==Message.ISREAD_FALSE){
+            if (message.getIsRead() == Message.ISREAD_FALSE) {
                 message.setIsRead(Message.ISREAD_TRUE);
-                DbHelper.save(Message.class,message);
-            }
-        }
-
-        @OnClick(R.id.im_portrait)
-        void onRePushClick() {
-            // 重新发送
-
-            if (isSendFail != null && mPresenter.rePush(mData)) {
-                // 必须是右边的才有可能需要重新发送
-                // 状态改变需要重新刷新界面当前的信息
-                updateData(mData);
+                DbHelper.save(Message.class, message);
             }
 
+            if(isSendFail!=null){
+                isSendFail.setOnClickListener(v->{
+                    if (mPresenter.rePush(mData)) {
+                        // 必须是右边的才有可能需要重新发送
+                        // 状态改变需要重新刷新界面当前的信息
+                        updateData(mData);
+                    }
+                });
+            }
         }
     }
 
@@ -490,7 +480,8 @@ public abstract class ChatFragment<InitModel>
         TextView mContent;
         @BindView(R.id.im_audio_track)
         ImageView mAudioTrack;
-
+        @BindView(R.id.ll_chat)
+        LinearLayout mLinearLayout;
         public AudioHolder(View itemView) {
             super(itemView);
         }
@@ -502,6 +493,19 @@ public abstract class ChatFragment<InitModel>
             String attach = TextUtils.isEmpty(message.getAttach()) ? "0" :
                     message.getAttach();
             mContent.setText(formatTime(attach));
+            mLinearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (message.getType() == Message.TYPE_AUDIO ) {
+                        // 权限的判断，当然权限已经全局申请了
+                        mAudioFileCache.download(getAudioHolder(), message.getContent());
+                    }
+                }
+            });
+        }
+
+        public AudioHolder getAudioHolder(){
+            return this;
         }
 
         // 当播放开始

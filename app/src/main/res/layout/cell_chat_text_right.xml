@@ -52,6 +52,7 @@
                 android:paddingStart="13dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/textDark"
+                android:textIsSelectable="true"
                 tools:text="我"
                 tools:ignore="RtlSymmetry" />
         </LinearLayout>
@@ -64,8 +65,6 @@
         android:layout_width="@dimen/portraitSize"
         android:layout_height="@dimen/portraitSize"
         android:layout_gravity="end"
-        android:src="@drawable/default_portrait"
-        app:civ_border_color="@color/white"
-        app:civ_border_width="2dp" />
+        android:src="@drawable/default_portrait" />
 
 </LinearLayout>
