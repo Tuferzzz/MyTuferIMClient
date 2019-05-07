@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 
 import com.tufer.common.app.ToolbarActivity;
 import com.tufer.common.tools.SingleClickHelper;
+import com.tufer.factory.Factory;
 import com.tufer.factory.persistence.Account;
 import com.tufer.mylove.R;
 import com.tufer.mylove.notification.NotificationChannels;
@@ -72,6 +73,13 @@ public class SettingActivity extends ToolbarActivity {
     protected void initWidget() {
         super.initWidget();
         SingleClickHelper.click(newMessageNotification,v -> NotificationUtil.gotoNotificationChannelSetting(this, NotificationChannels.NEWMESSAGE,NOTIFICATION_REQUESTCODE));
+        SingleClickHelper.click(switchAccount,v->{
+            if(Account.isLogin()){
+                Account.clearAccount();
+                AccountActivity.show(this);
+                Factory.app().finishAll();
+            }
+        });
     }
 
     @Override

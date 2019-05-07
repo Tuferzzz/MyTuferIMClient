@@ -195,6 +195,8 @@ public class MainActivity extends PresenterActivity<OutAccountContract.Presenter
         int id = item.getItemId();
         switch (id){
             case R.id.nav_my_data:
+                PersonalActivity.show(this,Account.getUserId());
+                return true;
             case R.id.nav_my_news:
             case R.id.nav_my_album:
                 Toast.makeText(this,item.getTitle(),Toast.LENGTH_LONG).show();
